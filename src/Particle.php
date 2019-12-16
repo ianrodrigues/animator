@@ -24,7 +24,7 @@ final class Particle
         $this->direction = $direction;
     }
 
-    public function getNextPosition(int $rate): int
+    public function getPositionFor(int $rate): int
     {
         if ($this->direction === self::RIGHT_TOKEN) {
             return $this->initialPosition + $rate;

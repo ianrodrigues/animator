@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Rodrigues\Animator;
 
+use Rodrigues\Animator\Contracts\ParticleFactory;
 use Rodrigues\Animator\Exception\InvalidSpeedException;
 use Rodrigues\Animator\Exception\InvalidChamberSizeException;
 
 final class Animator
 {
-    private const OCCUPIED_LOCATION_TOKEN = 'X';
-    private const EMPTY_LOCATION_TOKEN = '.';
+    public const OCCUPIED_LOCATION_TOKEN = 'X';
+    public const EMPTY_LOCATION_TOKEN = '.';
+
+    private $particleFactory;
+
+    public function __construct(ParticleFactory $particleFactory)
+    {
+        $this->particleFactory = $particleFactory;
+    }
 
     public function animate(int $speed, string $chamber): array
     {
@@ -23,40 +31,31 @@ final class Animator
             throw new InvalidChamberSizeException('Chamber size should be between 1 and 50.');
         }
 
-        $particles = [];
-
-        for ($i = 0; $i < $chamberSize; $i++) {
-            if ($chamber[$i] === self::EMPTY_LOCATION_TOKEN) {
-                continue;
-            }
-
-            $particles[] = new Particle($i, $chamber[$i]);
-        }
+        $particles = $this->particleFactory->createParticles($chamber);
 
         $chamberOverTime = [];
 
         $time = 0;
         do {
             $rate = $time * $speed;
-            $chamber = $this->updateChamberState($chamber, $particles, $rate);
-            $chamberOverTime[] = $chamber;
+            $newState = $this->chamberStateFor($chamberSize, $particles, $rate);
+            $chamberOverTime[] = $newState;
 
             $time++;
-        } while (trim($chamber, self::EMPTY_LOCATION_TOKEN));
+        } while (trim($newState, Animator::EMPTY_LOCATION_TOKEN));
         
         return $chamberOverTime;
     }
 
-    private function updateChamberState(string $chamber, array $particles, int $rate): string
+    private function chamberStateFor($chamberSize, array $particles, int $rate): string
     {
-        $chamberSize = strlen($chamber);
-        $state = str_repeat(self::EMPTY_LOCATION_TOKEN, $chamberSize);
+        $state = str_repeat(Animator::EMPTY_LOCATION_TOKEN, $chamberSize);
         
         foreach ($particles as $particle) {
-            $position = $particle->getNextPosition($rate);
+            $position = $particle->getPositionFor($rate);
             
             if ($position >= 0 && $position < $chamberSize) {
-                $state[$position] = self::OCCUPIED_LOCATION_TOKEN;
+                $state[$position] = Animator::OCCUPIED_LOCATION_TOKEN;
             }
         }
 

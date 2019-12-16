@@ -25,7 +25,7 @@ class ParticleTest extends TestCase
     {
         $particle = new Particle($initialPosition, $direction);
 
-        $this->assertEquals($position, $particle->getNextPosition($speed * $time));
+        $this->assertEquals($position, $particle->getPositionFor($speed * $time));
     }
 
     public function particlePositions(): iterable

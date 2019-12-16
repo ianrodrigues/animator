@@ -6,6 +6,7 @@ namespace Rodrigues\Animator\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Rodrigues\Animator\Animator;
+use Rodrigues\Animator\DefaultParticleFactory;
 use Rodrigues\Animator\Exception\InvalidSpeedException;
 use Rodrigues\Animator\Exception\InvalidChamberSizeException;
 
@@ -13,7 +14,7 @@ class AnimatorTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->animator = new Animator();
+        $this->animator = new Animator(new DefaultParticleFactory());
 
         parent::setUp();
     }
