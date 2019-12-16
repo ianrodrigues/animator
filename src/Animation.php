@@ -8,7 +8,7 @@ use Rodrigues\Animator\Contracts\ParticleFactory;
 use Rodrigues\Animator\Exception\InvalidSpeedException;
 use Rodrigues\Animator\Exception\InvalidChamberSizeException;
 
-final class Animator
+final class Animation
 {
     public const OCCUPIED_LOCATION_TOKEN = 'X';
     public const EMPTY_LOCATION_TOKEN = '.';
@@ -36,7 +36,7 @@ final class Animator
             $chamberOverTime[] = $newState;
 
             $time++;
-        } while (trim($newState, Animator::EMPTY_LOCATION_TOKEN));
+        } while (trim($newState, Animation::EMPTY_LOCATION_TOKEN));
         
         return $chamberOverTime;
     }
@@ -54,13 +54,13 @@ final class Animator
 
     private function chamberStateFor($chamberSize, array $particles, int $rate): string
     {
-        $state = str_repeat(Animator::EMPTY_LOCATION_TOKEN, $chamberSize);
+        $state = str_repeat(Animation::EMPTY_LOCATION_TOKEN, $chamberSize);
         
         foreach ($particles as $particle) {
             $position = $particle->getPositionFor($rate);
             
             if ($position >= 0 && $position < $chamberSize) {
-                $state[$position] = Animator::OCCUPIED_LOCATION_TOKEN;
+                $state[$position] = Animation::OCCUPIED_LOCATION_TOKEN;
             }
         }
 

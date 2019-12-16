@@ -16,7 +16,7 @@ final class DefaultParticleFactory implements ParticleFactory
         $chamberSize = strlen($chamber);
 
         for ($i = 0; $i < $chamberSize; $i++) {
-            if ($chamber[$i] === Animator::EMPTY_LOCATION_TOKEN) {
+            if ($chamber[$i] === Animation::EMPTY_LOCATION_TOKEN) {
                 continue;
             }
 

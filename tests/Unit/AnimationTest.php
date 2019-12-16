@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Rodrigues\Animator\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Rodrigues\Animator\Animator;
+use Rodrigues\Animator\Animation;
 use Rodrigues\Animator\DefaultParticleFactory;
 use Rodrigues\Animator\Exception\InvalidSpeedException;
 use Rodrigues\Animator\Exception\InvalidChamberSizeException;
 
-class AnimatorTest extends TestCase
+class AnimationTest extends TestCase
 {
     protected function setUp(): void
     {
-        $this->animator = new Animator(new DefaultParticleFactory());
+        $this->animation = new Animation(new DefaultParticleFactory());
 
         parent::setUp();
     }
@@ -27,7 +27,7 @@ class AnimatorTest extends TestCase
         $this->expectException(InvalidSpeedException::class);
         $this->expectExceptionMessage('Speed should be between 1 and 10.');
 
-        $this->animator->animate($speed, 'RLRLRLRL');
+        $this->animation->animate($speed, 'RLRLRLRL');
     }
 
     /**
@@ -38,7 +38,7 @@ class AnimatorTest extends TestCase
         $this->expectException(InvalidChamberSizeException::class);
         $this->expectExceptionMessage('Chamber size should be between 1 and 50.');
 
-        $this->animator->animate(1, $chamber);
+        $this->animation->animate(1, $chamber);
     }
 
     /**
@@ -46,7 +46,7 @@ class AnimatorTest extends TestCase
      */
     public function test_animate(int $speed, string $chamber, array $expected): void
     {
-        $this->assertEquals($expected, $this->animator->animate($speed, $chamber));
+        $this->assertEquals($expected, $this->animation->animate($speed, $chamber));
     }
 
     public function invalidSpeeds(): iterable
