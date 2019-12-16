@@ -1,0 +1,25 @@
+{
+    "name": "ianrodrigues/animator",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Rodrigues\\Animator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rodrigues\\Animator\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ian Rodrigues",
+            "email": "ianrdgs@gmail.com"
+        }
+    ],
+    "require": {}
+}
