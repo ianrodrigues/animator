@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Rodrigues\Animator;
 
+use Rodrigues\Animator\Exception\InvalidSpeedException;
+use Rodrigues\Animator\Exception\InvalidChamberSizeException;
+
 final class Animator
 {
     private const OCCUPIED_LOCATION_TOKEN = 'X';
@@ -11,7 +14,15 @@ final class Animator
 
     public function animate(int $speed, string $chamber): array
     {
+        if ($speed < 1 || $speed > 10) {
+            throw new InvalidSpeedException('Speed should be between 1 and 10.');
+        }
+
         $chamberSize = strlen($chamber);
+        if ($chamberSize < 1 || $chamberSize > 50) {
+            throw new InvalidChamberSizeException('Chamber size should be between 1 and 50.');
+        }
+
         $particles = [];
 
         for ($i = 0; $i < $chamberSize; $i++) {

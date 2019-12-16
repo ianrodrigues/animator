@@ -6,17 +6,58 @@ namespace Rodrigues\Animator\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Rodrigues\Animator\Animator;
+use Rodrigues\Animator\Exception\InvalidSpeedException;
+use Rodrigues\Animator\Exception\InvalidChamberSizeException;
 
 class AnimatorTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        $this->animator = new Animator();
+
+        parent::setUp();
+    }
+
+    /**
+     * @dataProvider invalidSpeeds
+     */
+    public function test_validate_speed(int $speed): void
+    {
+        $this->expectException(InvalidSpeedException::class);
+        $this->expectExceptionMessage('Speed should be between 1 and 10.');
+
+        $this->animator->animate($speed, 'RLRLRLRL');
+    }
+
+    /**
+     * @dataProvider invalidChambers
+     */
+    public function test_validate_chamber_size(string $chamber): void
+    {
+        $this->expectException(InvalidChamberSizeException::class);
+        $this->expectExceptionMessage('Chamber size should be between 1 and 50.');
+
+        $this->animator->animate(1, $chamber);
+    }
+
     /**
      * @dataProvider expectedChamber
      */
     public function test_animate(int $speed, string $chamber, array $expected): void
     {
-        $animator = new Animator();
+        $this->assertEquals($expected, $this->animator->animate($speed, $chamber));
+    }
 
-        $this->assertEquals($expected, $animator->animate($speed, $chamber));
+    public function invalidSpeeds(): iterable
+    {
+        yield [0];
+        yield [11];
+    }
+
+    public function invalidChambers(): iterable
+    {
+        yield [''];
+        yield ['RLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLRL'];
     }
 
     public function expectedChamber(): iterable
